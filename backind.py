@@ -13,7 +13,7 @@ ip = "0.0.0.0"
 f_choise = input('what want to share File: f or Text: t\n')
 
 def main():
-    server_address = ("0.0.0.0", PORT)
+    server_address = (ip, PORT)
     server = HTTPServer(server_address, requestHandler)
     print('Server running on port %s' % PORT)
     server.serve_forever()

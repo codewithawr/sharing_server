@@ -1,6 +1,7 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import http.server
+from ntpath import join
 
 import os
 directory = os.getcwd()
@@ -40,9 +41,14 @@ if f_choise =='f':
 
 elif f_choise == 't':
     # text_to_shaire = input('write tha text blow:\n')
-    import sys
-    msg = sys.stdin.readlines()
-    text_to_shaire = str(msg).replace('[', '').replace(']', '').replace("'", '').replace('"', '').replace('\\n', '\n').replace(',', '')
+    if input('is it miltyline y/n') == 'y':
+        import sys
+        print('write tha text blow : to end add ^Z to last line')
+        import sys
+        msg = sys.stdin.readlines()
+        text_to_shaire = ''.join(str(i) for i in msg)
+    else:
+        text_to_shaire = input('write the singel line text blow :\n')
 
     class requestHandler(BaseHTTPRequestHandler) :
         def do_GET(self) :
@@ -53,20 +59,39 @@ elif f_choise == 't':
                 self.send_header('content-type' , 'text/html')
                 self.end_headers()
                 Output = ''
-                # Output += '<h1>%s</h1>'% text_to_shaire
                 Output +=f'''
-                <html><body>
-
-                <h2>Text sheard is </h2>
-                <textarea cols="60" rows="13">{text_to_shaire}</textarea><br>
-
-                <a href="e">exit</a>
-                </body></html>
+                <html>
+                    <body>
+                        <h2>Text sheard is </h2>
+                        <pre id="myInput" class="wp-block-code"><code>{text_to_shaire}'''
+                Output +='''</code>
+                                </pre>
+                            <button class="k2-copy-button" id="k2button">Click to Copy</button>
+                            <script>
+                            function copyFunction() {
+                            const copyText = document.getElementById("myInput").textContent;
+                            const textArea = document.createElement('textarea');
+                            textArea.textContent = copyText;
+                            document.body.append(textArea);
+                            textArea.select();
+                            document.execCommand("copy");
+                            k2button.innerText = "Code copied";
+                                textArea.remove();
+                            }
+                            document.getElementById('k2button').addEventListener('click', copyFunction);
+                            </script>
+                        <br>
+                        <br>
+                        <a href="e">exit</a>
+                    </body>
+                </html>
                 '''
                 self.wfile.write(Output.encode( ))
     def main():
-        hostname=socket.gethostname()   
-        IPAddr=socket.gethostbyname(hostname) 
+        import socket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        IPAddr= s.getsockname()[0]
 
         server_address = (ip, PORT)
         server = HTTPServer(server_address, requestHandler)

@@ -38,7 +38,6 @@ if f_choise =='f':
     main()
 
 
-
 elif f_choise == 't':
     # text_to_shaire = input('write tha text blow:\n')
     if input('is it miltyline y/n :') == 'y':

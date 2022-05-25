@@ -1,11 +1,9 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import http.server
-from ntpath import join
 
 import os
 directory = os.getcwd()
-import socket
 
 PORT = 8080
 ip = "0.0.0.0"
@@ -43,7 +41,7 @@ if f_choise =='f':
 
 elif f_choise == 't':
     # text_to_shaire = input('write tha text blow:\n')
-    if input('is it miltyline y/n') == 'y':
+    if input('is it miltyline y/n :') == 'y':
         import sys
         print('write tha text blow : to end add ^Z to last line')
         import sys

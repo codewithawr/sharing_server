@@ -1,5 +1,5 @@
 # Share files text to Phone
-are you literally using whatsapp or typing things from pc to mobile  
+are you literally using whatsapp or typing things from pc to other divice on locelnetwork
 
 from this project you can make a simpel server from you pc and conect it with your mobile browser  share files of text
 

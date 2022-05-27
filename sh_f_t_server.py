@@ -2,21 +2,21 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import http.server
 
-import os
 
 PORT = 8080
 ip = "0.0.0.0"
 
 def main():
-        import socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        IPAddr= s.getsockname()[0]
+    # geting the Gateway of host
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    IPAddr= s.getsockname()[0]
 
-        server_address = (ip, PORT)
-        server = HTTPServer(server_address, requestHandler)
-        print(f'Server running on ip {IPAddr}, port {PORT}')
-        server.serve_forever()
+    server_address = (ip, PORT)
+    server = HTTPServer(server_address, requestHandler)
+    print(f'Server running on ip {IPAddr}, port {PORT}')
+    server.serve_forever()
 
 f_choise = input('what want to share File: f or Text: t\n')
 

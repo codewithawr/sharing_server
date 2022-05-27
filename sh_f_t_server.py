@@ -3,26 +3,11 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import http.server
 
 import os
-directory = os.getcwd()
 
 PORT = 8080
 ip = "0.0.0.0"
 
-
-f_choise = input('what want to share File: f or Text: t\n')
-
-if f_choise =='f':
-    from tkinter import filedialog
-    import tkinter as tk
-    root = tk.Tk()
-    root.withdraw ()
-    path = filedialog.askdirectory()
-    path = path.replace('/', '\\')
-
-    class requestHandler(http.server.SimpleHTTPRequestHandler):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, directory=path, **kwargs)
-    def main():
+def main():
         import socket
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
@@ -33,6 +18,22 @@ if f_choise =='f':
         print(f'Server running on ip {IPAddr}, port {PORT}')
         server.serve_forever()
 
+f_choise = input('what want to share File: f or Text: t\n')
+
+if f_choise =='f':
+    try:
+        from tkinter import filedialog
+        import tkinter as tk
+        root = tk.Tk()
+        root.withdraw ()
+        path = filedialog.askdirectory()
+        path = path.replace('/', '\\')
+    except:
+        path = input('error to open directory finder\ntype the path of folder heare:')
+
+    class requestHandler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, directory=path, **kwargs)
 
     
     main()
@@ -85,17 +86,7 @@ elif f_choise == 't':
                 </html>
                 '''
                 self.wfile.write(Output.encode( ))
-    def main():
-        import socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        IPAddr= s.getsockname()[0]
-
-        server_address = (ip, PORT)
-        server = HTTPServer(server_address, requestHandler)
-        print(f'Server running on ip {IPAddr}, port {PORT}')
-        server.serve_forever()
-
+    
 
     
     main()

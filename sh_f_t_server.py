@@ -6,7 +6,7 @@ import http.server
 PORT = 8080
 ip = "0.0.0.0"
 
-def main():
+def main_server():
     # geting the Gateway of host
     import socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -18,10 +18,13 @@ def main():
     print(f'Server running on ip {IPAddr}, port {PORT}')
     server.serve_forever()
 
+
+
 f_choise = input('what want to share File: f or Text: t\n')
 
 if f_choise =='f':
     try:
+        # opening windows directory opener with tkinter
         from tkinter import filedialog
         import tkinter as tk
         root = tk.Tk()
@@ -31,12 +34,19 @@ if f_choise =='f':
     except:
         path = input('error to open directory finder\ntype the path of folder heare:')
 
-    class requestHandler(http.server.SimpleHTTPRequestHandler):
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, directory=path, **kwargs)
+    # modifing server class to add different directory 
+    # so it start server in slacted directory
 
-    
-    main()
+    try:
+        class requestHandler(http.server.SimpleHTTPRequestHandler):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, directory=path, **kwargs)
+                if self.path.endswith('/e'):
+                    quit()
+        main_server()
+    except Exception as e:
+        print(e)
+
 
 
 elif f_choise == 't':
@@ -50,43 +60,47 @@ elif f_choise == 't':
     else:
         text_to_shaire = input('write the singel line text blow :\n')
 
-    class requestHandler(BaseHTTPRequestHandler) :
-        def do_GET(self) :
-            if self.path.endswith('/e'):
-                quit()
-            else:
-                self.send_response(200)
-                self.send_header('content-type' , 'text/html')
-                self.end_headers()
-                Output = ''
-                Output +=f'''
-                <html>
-                    <body>
-                        <h2>Text sheard is </h2>
-                        <pre id="myInput" class="wp-block-code"><textarea rows="10" cols="50">{text_to_shaire}</textarea>'''
-                Output +='''</pre>
-                            <button class="k2-copy-button" id="k2button">Click to Copy</button>
-                            <script>
-                            function copyFunction() {
-                            const copyText = document.getElementById("myInput").textContent;
-                            const textArea = document.createElement('textarea');
-                            textArea.textContent = copyText;
-                            document.body.append(textArea);
-                            textArea.select();
-                            document.execCommand("copy");
-                            k2button.innerText = "Code copied";
-                                textArea.remove();
-                            }
-                            document.getElementById('k2button').addEventListener('click', copyFunction);
-                            </script>
-                        <br>
-                        <br>
-                        <a href="e">exit</a>
-                    </body>
-                </html>
-                '''
-                self.wfile.write(Output.encode( ))
-    
+    try:    
+        # addin respond to th request's
+        class requestHandler(BaseHTTPRequestHandler) :
+            def do_GET(self) :
+                # this for if client device request /e so that it kills the programe 
+                if self.path.endswith('/e'):
+                    quit()
+                else:
+                    self.send_response(200)
+                    self.send_header('content-type' , 'text/html')
+                    self.end_headers()
+                    Output = ''
+                    Output +=f'''
+                    <html>
+                        <body>
+                            <h2>Text sheard is </h2>
+                            <pre id="myInput" class="wp-block-code"><textarea rows="10" cols="50">{text_to_shaire}</textarea>'''
+                    Output +='''</pre>
+                                <button class="k2-copy-button" id="k2button">Click to Copy</button>
+                                <script>
+                                function copyFunction() {
+                                const copyText = document.getElementById("myInput").textContent;
+                                const textArea = document.createElement('textarea');
+                                textArea.textContent = copyText;
+                                document.body.append(textArea);
+                                textArea.select();
+                                document.execCommand("copy");
+                                k2button.innerText = "Code copied";
+                                    textArea.remove();
+                                }
+                                document.getElementById('k2button').addEventListener('click', copyFunction);
+                                </script>
+                            <br>
+                            <br>
+                            <a href="e">exit</a>
+                        </body>
+                    </html>
+                    '''
+                    self.wfile.write(Output.encode( ))
+        
 
-    
-    main()
+        main_server()
+    except Exception as e:
+        print(e)
